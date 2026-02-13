@@ -1,0 +1,44 @@
+# =========================
+# Dependencias
+# =========================
+vendor/
+node_modules/
+
+# =========================
+# Archivos de entorno
+# =========================
+.env
+.env.local
+.env.*.local
+
+# =========================
+# Logs
+# =========================
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =========================
+# Archivos del sistema
+# =========================
+.DS_Store
+Thumbs.db
+
+# =========================
+# IDEs / Editores
+# =========================
+.vscode/
+.idea/
+*.swp
+
+# =========================
+# Archivos temporales
+# =========================
+*.tmp
+*.cache
+
+# =========================
+# Configuración local
+# =========================
+config/database.local.php
