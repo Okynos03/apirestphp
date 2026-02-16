@@ -80,7 +80,7 @@ class ProductResource
 
         $data = json_decode(file_get_contents("php://input"));
 
-        if (!empty($data->name) && !empty($data->email)) {
+        if (!empty($data->name) && !empty($data->sku) && !empty($data->price)) {
             $this->product->name = $data->name;
             $this->product->sku = $data->sku;
             $this->product->price = $data->price;
@@ -111,7 +111,7 @@ class ProductResource
 
         $this->product->id = $id;
 
-        if (!empty($data->name) && !empty($data->email)) {
+        if (!empty($data->name) && !empty($data->sku) && !empty($data->price)) {
             $this->product->name = $data->name;
             $this->product->sku = $data->sku;
             $this->product->price = $data->price;
