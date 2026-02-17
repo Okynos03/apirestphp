@@ -20,6 +20,34 @@ class Router
         ];
     }
 
+    private function getAuthorizationHeader()
+    {
+        if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+            return trim($_SERVER['HTTP_AUTHORIZATION']);
+        }
+
+        // Fallback por si Apache no lo expone directo
+        if (function_exists('apache_request_headers')) {
+            $headers = apache_request_headers();
+            if (isset($headers['Authorization'])) return trim($headers['Authorization']);
+            if (isset($headers['authorization'])) return trim($headers['authorization']);
+        }
+
+        return null;
+    }
+
+    private function getBearerToken()
+    {
+        $auth = $this->getAuthorizationHeader();
+        if (!$auth) return null;
+
+        if (preg_match('/Bearer\s+(\S+)/', $auth, $matches)) {
+            return $matches[1];
+        }
+
+        return null;
+    }
+
     public function dispatch()
     {
         $method = $_SERVER['REQUEST_METHOD'];
@@ -37,8 +65,45 @@ class Router
             $pattern = '#^' . $pattern . '$#';
 
             if ($route['method'] === $method && preg_match($pattern, $uri, $matches)) {
-                array_shift($matches);
-                return call_user_func_array($route['handler'], $matches);
+                    $publicRoutes = [
+                        "POST:/api/{$this->version}/login",
+                        "POST:/api/{$this->version}/apiusers",
+                    ];
+
+                    $routeKey = $method . ":" . $route['path'];
+
+                    //Si NO es pública, exigir token válido
+                    if (!in_array($routeKey, $publicRoutes, true)) {
+
+                        require_once __DIR__ . '/../config/database.php';
+                        require_once __DIR__ . '/../models/ApiToken.php';
+
+                        $database = new Database();
+                        $db = $database->getConnection();
+                        $apiToken = new ApiToken($db);
+
+                        $token = $this->getBearerToken();
+
+                        if (!$token) {
+                            http_response_code(401);
+                            echo json_encode(["message" => "Falta token. Usa Authorization: Bearer <token>"]);
+                            return;
+                        }
+
+                        $userId = $apiToken->validate($token);
+
+                        if (!$userId) {
+                            http_response_code(401);
+                            echo json_encode(["message" => "Token inválido o expirado"]);
+                            return;
+                        }
+
+                        // (Opcional) Dejar disponible el usuario autenticado a los resources
+                        $_SERVER['AUTH_USER_ID'] = $userId;
+                    }
+
+                    array_shift($matches);
+                    return call_user_func_array($route['handler'], $matches);
             }
         }
 

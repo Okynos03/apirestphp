@@ -129,5 +129,27 @@ class ApiUser
         }
         return false;
     }
+
+    public function findByUsername($username){
+        $query = "SELECT id, username, password_hash, status
+                  FROM " . $this->table_name . " 
+                  WHERE username = :username 
+                  LIMIT 1";
+
+        $stmt = $this->conn->prepare($query);
+        $stmt->bindParam(":username", $username);
+        $stmt->execute();
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if ($row) {
+            $this->id = $row['id'];
+            $this->username = $row['username'];
+            $this->password_hash = $row['password_hash'];
+            $this->status = $row['status'];
+            return true;
+        }
+        return false;
+    }
 }
 ?>

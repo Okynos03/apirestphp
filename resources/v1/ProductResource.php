@@ -69,7 +69,7 @@ class ProductResource
             echo json_encode($product_arr);
         } else {
             http_response_code(404);
-            echo json_encode(array("message" => "Usuario no encontrado"));
+            echo json_encode(array("message" => "Producto no encontrado"));
         }
     }
 
@@ -89,12 +89,12 @@ class ProductResource
             if ($this->product->create()) {
                 http_response_code(201);
                 echo json_encode(array(
-                    "message" => "Usuario creado exitosamente",
+                    "message" => "Producto creado exitosamente",
                     "id" => $this->product->id
                 ));
             } else {
                 http_response_code(503);
-                echo json_encode(array("message" => "No se pudo crear el usuario"));
+                echo json_encode(array("message" => "No se pudo crear el Producto"));
             }
         } else {
             http_response_code(400);
@@ -119,10 +119,10 @@ class ProductResource
 
             if ($this->product->update()) {
                 http_response_code(200);
-                echo json_encode(array("message" => "Usuario actualizado exitosamente"));
+                echo json_encode(array("message" => "Producto actualizado exitosamente"));
             } else {
                 http_response_code(503);
-                echo json_encode(array("message" => "No se pudo actualizar el usuario"));
+                echo json_encode(array("message" => "No se pudo actualizar el Producto"));
             }
         } else {
             http_response_code(400);
@@ -139,10 +139,10 @@ class ProductResource
 
         if ($this->product->delete()) {
             http_response_code(200);
-            echo json_encode(array("message" => "Usuario eliminado exitosamente"));
+            echo json_encode(array("message" => "Producto eliminado exitosamente"));
         } else {
             http_response_code(503);
-            echo json_encode(array("message" => "No se pudo eliminar el usuario"));
+            echo json_encode(array("message" => "No se pudo eliminar el Producto"));
         }
     }
 }
