@@ -2,9 +2,12 @@
 class Database
 {
     private $host = "localhost";
+    //private $db_name = "topicosweb";
+    //private $username = "db_22030041";
+    //private $password = "22030041";
     private $db_name = "topicosweb";
-    private $username = "db_22030041";
-    private $password = "22030041";
+    private $username = "okynos";
+    private $password = "okynos";
 
 
     public $conn;

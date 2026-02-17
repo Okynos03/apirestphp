@@ -7,6 +7,7 @@ header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers
 require_once '../core/Router.php';
 require_once '../resources/v1/UserResource.php';
 require_once '../resources/v1/ProductResource.php';
+require_once '../resources/v1/ApiUserResource.php';
 
 $scriptName = dirname($_SERVER['SCRIPT_NAME']);
 $basePath = $scriptName;
@@ -14,6 +15,7 @@ $basePath = $scriptName;
 $router = new Router('v1', $basePath);
 $userResource = new UserResource();
 $productResource = new ProductResource();
+$apiUserResource = new ApiUserResource();
 
 // rutas
 $router->addRoute('GET', '/users', [$userResource, 'index']);
@@ -28,6 +30,13 @@ $router->addRoute('GET', '/products/{id}', [$productResource, 'show']);
 $router->addRoute('POST', '/products', [$productResource, 'store']);
 $router->addRoute('PUT', '/products/{id}', [$productResource, 'update']);
 $router->addRoute('DELETE', '/products/{id}', [$productResource, 'destroy']);
+
+//rutas para apiusuarios
+$router->addRoute('GET', '/apiusers', [$userResource, 'index']);
+$router->addRoute('GET', '/apiusers/{id}', [$userResource, 'show']);
+$router->addRoute('POST', '/apiusers', [$userResource, 'store']);
+$router->addRoute('PUT', '/apiusers/{id}', [$userResource, 'update']);
+$router->addRoute('DELETE', '/apiusers/{id}', [$userResource, 'destroy']);
 
 $router->dispatch();
 ?>
